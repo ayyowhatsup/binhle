@@ -1,0 +1,64 @@
+{% extends "authentication/account.html" %}
+{% block account_content %}
+<form action="." method="post">
+    {% csrf_token %}
+    <div class="border-bottom mb-6 pb-6 mb-lg-8 pb-lg-9">
+        <div class="pt-5 pl-md-5 pt-lg-8 pl-lg-9">
+            <h6 class="font-weight-medium font-size-7 ml-lg-1 mb-lg-8 pb-xl-1">Thông tin cá nhân
+            </h6>
+            {% if error %}
+            <div class="font-weight-bold mb-4 pb-xl-1 text-primary">* {{error}}</div>
+            {% endif %}
+            <div class="font-weight-medium font-size-22 mb-4 pb-xl-1">Chỉnh sửa thông tin cá nhân</div>
+            <div class="row">
+                <div class="col-md-12 mb-4">
+                    <div class="js-form-message">
+                        <label for="exampleFormControlInput1">Họ và tên</label>
+                        <input type="text" class="form-control rounded-0 pl-3 placeholder-color-3" name="name" placeholder="{{request.user.name}}">
+                    </div>
+                </div>
+                <div class="col-md-12 mb-4">
+                    <div class="js-form-message">
+                        <label>Số điện thoại</label>
+                        <input type="text" class="form-control rounded-0 pl-3 placeholder-color-3"
+                            name="phone_number" placeholder="{{request.user.phone_number}}">
+                    </div>
+                </div>
+                <div class="col-md-12 mb-4 mb-md-0">
+                    <div class="js-form-message">
+                        <label>Địa chỉ email</label>
+                        <input type="email" class="form-control rounded-0" name="email" placeholder="{{request.user.email}}">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="pl-md-5 pl-lg-9 space-bottom-2 space-bottom-lg-3">
+        <div class="font-weight-medium font-size-22 mb-4 pb-xl-1">Thay đổi mật khẩu</div>
+        <div class="row">
+            <div class="col-md-12 mb-4">
+                <div class="js-form-message">
+                    <label>Mật khẩu hiện tại</label>
+                    <input type="password" class="form-control rounded-0" name="current_password">
+                </div>
+            </div>
+            <div class="col-md-12 mb-4">
+                <div class="js-form-message">
+                    <label for="exampleFormControlInput6">Mật khẩu mới</label>
+                    <input type="password" class="form-control rounded-0" name="new_password">
+                </div>
+            </div>
+            <div class="col-md-12 mb-5">
+                <div class="js-form-message">
+                    <label for="exampleFormControlInput7">Nhập lại mật khẩu mới</label>
+                    <input type="password" class="form-control rounded-0" name="confirm_new_password">
+                </div>
+            </div>
+            <div class="ml-3">
+                <button type="submit"
+                    class="btn btn-wide btn-dark text-white rounded-0 transition-3d-hover height-60 width-390">Lưu thay đổi</button>
+            </div>
+        </div>
+    </div>
+</form>
+{% endblock %}

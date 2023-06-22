@@ -1,0 +1,347 @@
+{% extends "base.html" %}
+{% load humanize %}
+{% block content %}
+{% load static %}
+<div class="right-sidebar">
+    <div class="page-header border-bottom">
+        <div class="container">
+            <div class="d-md-flex justify-content-between align-items-center py-4">
+                <h1 class="page-title font-size-3 font-weight-medium m-0 text-lh-lg">{{book.name}}</h1>
+                <nav class="woocommerce-breadcrumb font-size-2">
+                    <a href="{% url 'home_page' %}" class="h-primary">Trang chủ</a>
+                    <span class="breadcrumb-separator mx-1"><i class="fas fa-angle-right"></i></span>
+                    <a href="{% url 'shop' %}" class="h-primary">Sản phẩm</a>
+                    <span class="breadcrumb-separator mx-1"><i class="fas fa-angle-right"></i></span>{{book.name}}
+                </nav>
+            </div>
+        </div>
+    </div>
+    <div class="site-content" id="content">
+        <div class="container">
+            <div class="row space-top-2">
+                <div id="primary" class="content-area">
+                    <main id="main" class="site-main ">
+                        <div class="product">
+                            <div class="container">
+                                <div class="row">
+                                    <div
+                                        class="col-lg-5 woocommerce-product-gallery woocommerce-product-gallery--with-images images">
+                                        <figure class="woocommerce-product-gallery__wrapper mb-0">
+                                            <div class="js-slick-carousel u-slick"
+                                                data-pagi-classes="text-center u-slick__pagination my-4">
+                                                <div class="js-slide">
+                                                    <img src="{{book.image.url}}" width="300" alt="Image Description"
+                                                        class="mx-auto img-fluid">
+                                                </div>
+                                            </div>
+                                        </figure>
+                                    </div>
+                                    <div class="col-lg-7 pl-lg-0 summary entry-summary">
+                                        <div class="px-lg-4 px-xl-6">
+                                            <h1 class="product_title entry-title font-size-7 mb-3">{{book.name}}
+                                            </h1>
+                                            <div class="font-size-2 mb-4">
+                                                <span class="font-weight-medium">Tác giả: </span>
+                                                <span class="ml-2 text-gray-600">
+                                                    {% with authors=book.authors.all %}
+                                                    {% for author in authors %}
+                                                    <a href="{% url 'author_single' author.slug %}"
+                                                        class="text-gray-700">{{author.name}}</a>
+                                                    {% if not forloop.last %}<span>, </span>{% endif %}
+                                                    {% endfor %}
+                                                    {% endwith %}
+                                                </span>
+                                            </div>
+                                            <p class="price font-size-22 font-weight-medium mb-4">
+                                                {{book.price | floatformat | intcomma }}
+                                                <span class="woocommerce-Price-amount amount">
+                                                    <span class="woocommerce-Price-currencySymbol">₫</span>
+                                                </span>
+                                            </p>
+                                            {% if book.is_active and book.inventory > 0 %}
+                                            <form class="cart d-md-flex align-items-center" action="{% url 'cart' %}">
+                                                
+                                                <div class="quantity mb-4 mb-md-0 d-flex align-items-center">
+                                                    <!-- Quantity -->
+                                                    <div class="border px-3 width-120">
+                                                        <div class="js-quantity">
+                                                            <div class="d-flex align-items-center">
+                                                                <label
+                                                                    class="screen-reader-text sr-only">Quantity</label>
+                                                                <a class="js-minus text-dark" href="javascript:;">
+                                                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                                                        xmlns:xlink="http://www.w3.org/1999/xlink"
+                                                                        width="10px" height="1px">
+                                                                        <path fill-rule="evenodd" fill="rgb(22, 22, 25)"
+                                                                            d="M-0.000,-0.000 L10.000,-0.000 L10.000,1.000 L-0.000,1.000 L-0.000,-0.000 Z" />
+                                                                    </svg>
+                                                                </a>
+                                                                {% csrf_token %}
+                                                                <input type="hidden" value="add" name="operation" />
+                                                                <input type="hidden" value="ajax" name="type" />
+                                                                <input type="hidden" name="product_slug"
+                                                                    value="{{book.slug}}" />
+                                                                <input type="number"
+                                                                    class="input-text qty text js-result form-control text-center border-0"
+                                                                    step="1" min="1" max="100" name="quantity" value="1"
+                                                                    title="Qty">
+                                                                <a class="js-plus text-dark" href="javascript:;">
+                                                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                                                        xmlns:xlink="http://www.w3.org/1999/xlink"
+                                                                        width="10px" height="10px">
+                                                                        <path fill-rule="evenodd" fill="rgb(22, 22, 25)"
+                                                                            d="M10.000,5.000 L6.000,5.000 L6.000,10.000 L5.000,10.000 L5.000,5.000 L-0.000,5.000 L-0.000,4.000 L5.000,4.000 L5.000,-0.000 L6.000,-0.000 L6.000,4.000 L10.000,4.000 L10.000,5.000 Z" />
+                                                                    </svg>
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <!-- End Quantity -->
+                                                </div>
+
+                                                <div 
+                                                    class="btn btn-dark border-0 rounded-0 p-3 btn-block ml-md-4 single_add_to_cart_button button alt add-to-cart">
+                                                    Thêm vào giỏ</div>
+
+                                            </form>
+                                            {% else %}
+                                            <div class="quantity mb-4 mb-md-0 d-flex align-items-center justify-content-center">
+                                                <div class="text-primary font-weight-bold">HẾT HÀNG</div>
+                                                <a href="{% url 'shop' %}"
+                                                        class="btn btn-dark border-0 rounded-0 p-3 ml-md-4 button alt">
+                                                        Khám phá các sản phẩm khác</a>
+                                            </div>
+                                            
+                                            {% endif %}
+                                        </div>
+                                        <div class="px-lg-4 px-xl-7 py-5 d-flex align-items-center">
+                                            <ul class="list-unstyled nav">
+                                                <li class="mr-6 mb-4 mb-md-0">
+                                                    <form method="post" action="{% url 'account_wishlist' %}">
+                                                        {% csrf_token %}
+                                                        <input type="hidden" name="product_slug" value="{{book.slug}}">
+                                                        {% if book.on_wishlist %}
+                                                        <input type="hidden" name="operation" value="remove">
+                                                        <button type="submit"
+                                                            class="h-primary bg-transparent border-0 font-weight-medium"><i
+                                                                class="flaticon-heart mr-2 heart-red"></i>Đã yêu
+                                                            thích</button>
+                                                        {% else %}
+                                                        <input type="hidden" name="operation" value="add">
+                                                        <button type="submit"
+                                                            class="h-primary bg-transparent border-0"><i
+                                                                class="flaticon-heart mr-2"></i>Yêu thích</button>
+                                                        {% endif %}
+                                                    </form>
+                                                </li>
+                                                <li class="mr-6">
+                                                    <a href="#" class="h-primary"><i class="flaticon-share mr-2"></i>
+                                                        Chia sẻ</a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Features Section -->
+                            <div class="woocommerce-tabs wc-tabs-wrapper mb-10 row">
+                                <!-- Nav Classic -->
+                                <ul class="col-lg-4 col-xl-3 pt-9 border-top d-lg-block tabs wc-tabs nav justify-content-lg-center flex-nowrap flex-lg-wrap overflow-auto overflow-lg-visble"
+                                    id="pills-tab" role="tablist">
+                                    <li class="flex-shrink-0 flex-lg-shrink-1 nav-item mb-3">
+                                        <a class="py-1 d-inline-block nav-link font-weight-medium active"
+                                            id="pills-one-example1-tab" data-toggle="pill" href="#pills-one-example1"
+                                            role="tab" aria-controls="pills-one-example1" aria-selected="true">
+                                            Mô tả
+                                        </a>
+                                    </li>
+                                    <li class="flex-shrink-0 flex-lg-shrink-1 nav-item mb-3">
+                                        <a class="py-1 d-inline-block nav-link font-weight-medium"
+                                            id="pills-two-example1-tab" data-toggle="pill" href="#pills-two-example1"
+                                            role="tab" aria-controls="pills-two-example1" aria-selected="false">
+                                            Thông tin sản phẩm
+                                        </a>
+                                    </li>
+                                </ul>
+                                <!-- End Nav Classic -->
+
+                                <!-- Tab Content -->
+                                <div class="tab-content col-lg-8 col-xl-9 border-top" id="pills-tabContent">
+                                    <div class="woocommerce-Tabs-panel panel entry-content wc-tab tab-pane fade border-left pl-4 pt-4 pl-lg-6 pt-lg-6 pl-xl-9 pt-xl-9 show active"
+                                        id="pills-one-example1" role="tabpanel"
+                                        aria-labelledby="pills-one-example1-tab">
+                                        <!-- Mockup Block -->
+                                        {% with ds=book.description.splitlines %}
+                                        {% for d in ds %}
+                                        <p class="mb-2">{{d}}</p>
+                                        {% empty %}
+                                        <p class="mb-2">Không có mô tả.</p>
+                                        {% endfor %}
+                                        {% endwith %}
+                                        <!-- End Mockup Block -->
+                                    </div>
+                                    <div class="woocommerce-Tabs-panel panel entry-content wc-tab tab-pane fade border-left pl-4 pt-4 pl-lg-6 pt-lg-6 pl-xl-9 pt-xl-9"
+                                        id="pills-two-example1" role="tabpanel"
+                                        aria-labelledby="pills-two-example1-tab">
+                                        <!-- Mockup Block -->
+                                        <div class="table-responsive mb-4">
+                                            <table class="table table-hover table-borderless">
+                                                <tbody>
+                                                    <tr>
+                                                        <th class="px-4 px-xl-5">Trọng lượng: </th>
+                                                        <td>{{book.weight}}g</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th class="px-4 px-xl-5">Năm xuất bản:</th>
+                                                        <td>{{book.publish_year}}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th class="px-4 px-xl-5">Nhà xuất bản:</th>
+                                                        <td>{{book.publisher}}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th class="px-4 px-xl-5">Ngôn ngữ:</th>
+                                                        <td>{{book.language}}</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <!-- End Mockup Block -->
+                                    </div>
+                                </div>
+                                <!-- End Tab Content -->
+                            </div>
+                            <!-- End Features Section -->
+
+                        </div>
+                    </main>
+                </div>
+                <div id="secondary" class="sidebar widget-area order-1" role="complementary">
+                    <div id="widgetAccordion">
+                        <div class="widget p-4d875 border mb-5">
+                            {% for book in featured_books %}
+                            {% if not forloop.last %}
+                            <div class="mb-5">
+                                <div class="media d-md-flex">
+                                    <a class="d-block" href="{% url 'product_single' book.slug %}">
+                                        <img class="img-fluid" src="{{book.image.url}}" width="80" alt="Image-Description">
+                                    </a>
+                                    <div class="media-body ml-3 pl-1">
+                                        <h6 class="font-size-2 text-lh-md font-weight-normal">
+                                            <a href="{% url 'product_single' book.slug %}">{{book.name}}</a>
+                                        </h6>
+                                        <span class="font-weight-medium">{{book.price | floatformat | intcomma}}
+                                            ₫</span>
+                                    </div>
+                                </div>
+                            </div>
+                            {% else %}
+                            <div>
+                                <div class="media d-md-flex">
+                                    <a class="d-block" href="{% url 'product_single' book.slug %}">
+                                        <img class="img-fluid" src="{{book.image.url}}" width="80" alt="Image-Description">
+                                    </a>
+                                    <div class="media-body ml-3 pl-1">
+                                        <h6 class="font-size-2 text-lh-md font-weight-normal">
+                                            <a href="{% url 'product_single' book.slug %}">{{book.name}}</a>
+                                        </h6>
+                                        <span class="font-weight-medium">{{book.price | floatformat | intcomma}}
+                                            ₫</span>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endif %}
+                            {% endfor %}
+                        </div>
+
+                        <div class="widget border mb-5">
+                            <!-- Features Section -->
+                            <div class="site-features">
+                                <ul class="list-unstyled my-0 list-features">
+                                    <li class="list-feature p-4d875">
+                                        <div class="media d-md-block d-xl-flex text-center text-xl-left">
+                                            <div
+                                                class="feature__icon font-size-10 text-primary text-lh-xs mb-md-3 mb-lg-0">
+                                                <i class="glyph-icon flaticon-delivery"></i>
+                                            </div>
+                                            <div class="media-body ml-xl-4">
+                                                <h4 class="feature__title h6 mb-1 text-dark">Vận chuyển nhanh chóng</h4>
+                                                <p class="feature__subtitle m-0 text-dark">Với GHN</p>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="list-feature p-4d875 border-top">
+                                        <div class="media  d-md-block d-xl-flex text-center text-xl-left">
+                                            <div
+                                                class="feature__icon font-size-10 text-primary text-lh-xs mb-md-3 mb-lg-0">
+                                                <i class="glyph-icon flaticon-credit"></i>
+                                            </div>
+                                            <div class="media-body ml-xl-4">
+                                                <h4 class="feature__title h6 mb-1 text-dark">Thanh toán an toàn</h4>
+                                                <p class="feature__subtitle m-0 text-dark">Với Ví VNPay</p>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="list-feature p-4d875 border-top">
+                                        <div class="media  d-md-block d-xl-flex text-center text-xl-left">
+                                            <div
+                                                class="feature__icon font-size-10 text-primary text-lh-xs mb-md-3 mb-lg-0">
+                                                <i class="glyph-icon flaticon-warranty"></i>
+                                            </div>
+                                            <div class="media-body ml-xl-4">
+                                                <h4 class="feature__title h6 mb-1 text-dark">Hoàn tiền miễn phí</h4>
+                                                <p class="feature__subtitle m-0 text-dark">Trong 30 ngày</p>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="list-feature p-4d875 border-top">
+                                        <div class="media d-md-block d-xl-flex text-center text-xl-left">
+                                            <div
+                                                class="feature__icon font-size-10 text-primary text-lh-xs mb-md-3 mb-lg-0">
+                                                <i class="glyph-icon flaticon-help"></i>
+                                            </div>
+                                            <div class="media-body ml-xl-4">
+                                                <h4 class="feature__title h6 mb-1 text-dark">Hỗ trợ 24/7</h4>
+                                                <p class="feature__subtitle m-0 text-dark">Trong 1 ngày làm việc</p>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                            <!-- End Features Section -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(() => {
+        $('.heart-red').closest('button[type="submit"]').click((e) => {
+            e.preventDefault()
+            let form = $('.heart-red').closest('form')
+            $.ajax({
+                url: form.attr('action'),
+                data: form.serialize(),
+                method: 'POST',
+                beforeSend: function () {
+                    $('.loading-here').addClass("bg-loading")
+                    $(".loading-here").html(`<div class="spinner-border text-primary" role="status">
+                                            <span class="sr-only">Loading...</span>
+                                        </div>`)
+                },
+                complete: function () {
+                    $('.loading-here').removeClass("bg-loading")
+                    $('.loading-here').empty()
+                },
+                success: function(e){
+                    location.reload()
+                }
+            })
+        })
+    })
+</script>
+<script src="{% static 'assets/js/cart.js' %}"></script>
+{% endblock %}

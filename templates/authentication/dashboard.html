@@ -1,0 +1,49 @@
+{% extends "authentication/account.html" %}
+{% block account_content %}
+<div>
+    <div class="pt-5 pt-lg-8 pl-md-5 pl-lg-9 space-bottom-2 space-bottom-lg-3 mb-xl-1">
+        <h6 class="font-weight-medium font-size-7 ml-lg-1 mb-lg-8 pb-xl-1">Dashboard</h6>
+        <div class="ml-lg-1 mb-4">
+            <span class="font-size-22">Xin chào {% if request.user.name %} {{request.user.name}} {% else %} {{request.user.email}} {% endif %}</span>
+            <span class="font-size-2"> (không phải {% if request.user.name %} {{request.user.name}} {% else %} {{request.user.email}}{% endif %}? <a class="link-black-100" href="{% url 'logout' %}">Đăng xuất</a>)</span>
+        </div>
+        <div class="mb-4">
+            <p class="mb-0 font-size-2 ml-lg-1 text-gray-600">Từ đây bạn có thể xem <span class="text-dark">các đơn hàng và thay đổi <span class="text-dark">thông tin cá nhân và mật khẩu.</span></p>
+        </div>
+        <div class="row no-gutters row-cols-1 row-cols-md-2 row-cols-lg-3">
+            <div class="col">
+                <div class="border py-6 text-center">
+                    <a href="{% url 'account_detail' %}" class="btn btn-primary rounded-circle px-4 mb-2">
+                        <span class="flaticon-user-1 font-size-10 btn-icon__inner"></span>
+                    </a>
+                    <div class="font-size-3 mb-xl-1">Thông tin cá nhân</div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="border border-left-0 py-6 text-center">
+                    <a href="{% url 'account_order' %}" class="btn bg-gray-200 rounded-circle px-4 mb-2">
+                        <span class="flaticon-order font-size-10 btn-icon__inner text-primary"></span>
+                    </a>
+                    <div class="font-size-3 mb-xl-1">Đơn hàng</div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="border border-left-0 py-6 text-center">
+                    <a href="{% url 'account_wishlist' %}" class="btn bg-gray-200 rounded-circle px-4 mb-2">
+                        <span class="flaticon-heart font-size-10 btn-icon__inner text-primary"></span>
+                    </a>
+                    <div class="font-size-3 mb-xl-1">Danh sách yêu thích</div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="border py-6 text-center">
+                    <a href="{% url 'logout' %}" class="btn bg-gray-200 rounded-circle px-4 mb-2">
+                        <span class="flaticon-exit font-size-10 btn-icon__inner text-primary"></span>
+                    </a>
+                    <div class="font-size-3 mb-xl-1">Đăng xuất</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

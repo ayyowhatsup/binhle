@@ -1,0 +1,384 @@
+{% extends "base.html" %}
+{% block content %}
+{% load humanize %}
+<div class="right-sidebar woocommerce-checkout">
+  <div class="page-header border-bottom">
+    <div class="container">
+      <div class="d-md-flex justify-content-between align-items-center py-4">
+        <h1 class="page-title font-size-3 font-weight-medium m-0 text-lh-lg">
+          Thanh toán
+        </h1>
+        <nav class="woocommerce-breadcrumb font-size-2">
+          <a href="{% url 'home_page' %}" class="h-primary">Trang chủ</a>
+          <span class="breadcrumb-separator mx-1"><i class="fas fa-angle-right"></i></span>
+          <a href="{% url 'cart' %}" class="h-primary">Giỏ hàng</a>
+          <span class="breadcrumb-separator mx-1"><i class="fas fa-angle-right"></i></span>Thanh toán
+        </nav>
+      </div>
+    </div>
+  </div>
+  <div id="content" class="site-content bg-punch-light space-bottom-3">
+    <div class="col-full container">
+      <div id="primary" class="content-area">
+        <main id="main" class="site-main">
+          <article id="post-6" class="post-6 page type-page status-publish hentry">
+            <header class="entry-header space-top-1 space-bottom-1 mb-2">
+            </header>
+            {% if error %} <div class="text-primary font-weight-bold"> * {{error}}</div> {% endif %}
+            <div class="entry-content">
+              <div class="woocommerce">
+                <form action="." method="post" class="checkout woocommerce-checkout row mt-8">
+                  {% csrf_token %}
+                  <div class="col2-set col-md-6 col-lg-7 col-xl-8 mb-6 mb-md-0" id="customer_details">
+                    <div class="px-4 pt-5 bg-white border">
+                      <div class="woocommerce-billing-fields">
+                        <h3 class="mb-4 font-size-3">Thông tin giao hàng</h3>
+                        <div class="woocommerce-billing-fields__field-wrapper row">
+                          <p
+                            class="col-lg-12 mb-4d75 form-row form-row-first validate-required woocommerce-invalid woocommerce-invalid-required-field">
+                            <label for="shipping-name" class="form-label">Họ và tên
+                              <abbr class="required" title="required">*</abbr></label>
+                            <input type="text" class="input-text form-control" name="name" id="shipping-name"
+                              autofocus="autofocus" required />
+                          </p>
+                          <p class="col-lg-12 mb-4d75 form-row form-row-last validate-required">
+                            <label for="phone_number" class="form-label">Số điện thoại
+                              <abbr class="required" title="required">*</abbr></label>
+                            <input type="text" class="input-text form-control" name="phone_number" id="phone_number"
+                              required />
+                          </p>
+                          <p class="col-lg-12 mb-4d75 form-row form-row-last validate-required">
+                            <label for="email" class="form-label">Địa chỉ email
+                              <abbr class="required" title="required">*</abbr></label>
+                            <input type="text" class="input-text form-control" name="email" id="email" required />
+                          </p>
+                          <p
+                            class="col-12 mb-4d75 form-row form-row-wide address-field update_totals_on_change validate-required woocommerce-validated">
+                            <label for="shipping_province" class="form-label">Tỉnh/ Thành phố
+                              <abbr class="required" title="required">*</abbr></label>
+                            <select name="shipping_province" id="shipping_province" class="form-control" tabindex="-1"
+                              aria-hidden="true" required>
+                              <option selected value="">Chọn Tỉnh/ thành phố ...</option>
+                              {% for province in provinces %}
+                              <option value="{{province.ProvinceID}}-{{province.ProvinceName}}">
+                                {{province.ProvinceName}}</option>
+                              {% endfor %}
+                            </select>
+                          </p>
+                          <p
+                            class="col-12 mb-4d75 form-row form-row-wide address-field update_totals_on_change validate-required woocommerce-validated">
+                            <label for="shipping_district" class="form-label">Quận/ Huyện
+                              <abbr class="required" title="required">*</abbr></label>
+                            <select name="shipping_district" id="shipping_district" class="form-control" tabindex="-1"
+                              aria-hidden="true" required>
+                              <option value="">Chọn Quận/ Huyện ...</option>
+                            </select>
+                          </p>
+                          <p
+                            class="col-12 mb-4d75 form-row form-row-wide address-field update_totals_on_change validate-required woocommerce-validated">
+                            <label for="shipping_ward" class="form-label">Phường/ Thị Xã
+                              <abbr class="required" title="required">*</abbr></label>
+                            <select name="shipping_ward" id="shipping_ward" class="form-control" tabindex="-1"
+                              aria-hidden="true" required>
+                              <option selected value="">Chọn phường/ Thị xã ...</option>
+                            </select>
+                          </p>
+                          <p class="col-12 mb-3 form-row form-row-wide address-field validate-required">
+                            <label for="shipping_address" class="form-label">Địa chỉ cụ thể
+                              <abbr class="required" title="required">*</abbr></label>
+                            <input type="text" class="input-text form-control" name="shipping_address"
+                              id="shipping_address" placeholder="Địa chỉ cụ thể..." required />
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="px-4 pt-5 bg-white border border-top-0 mt-n-one">
+                      <div class="woocommerce-additional-fields">
+                        <h3 class="mb-4 font-size-3">Thông tin bổ sung</h3>
+                        <div class="woocommerce-additional-fields__field-wrapper">
+                          <p class="col-12 mb-4d75 px-0 form-row notes">
+                            <label for="addtional_note" class="form-label">Ghi chú cho đơn hàng</label>
+                            <textarea name="addtional_note" class="input-text form-control" id="order_comments"
+                              placeholder="Ghi chú cho đơn hàng của bạn, ví dụ: Thêm nhiều ớt ..." rows="8"
+                              cols="5"></textarea>
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <h3 id="order_review_heading" class="d-none">Your order</h3>
+                  <div id="order_review" class="col-md-6 col-lg-5 col-xl-4 woocommerce-checkout-review-order">
+                    <div id="checkoutAccordion" class="border border-gray-900 bg-white mb-5">
+                      <div class="p-4d875 border">
+                        <div id="checkoutHeadingOnee" class="checkout-head">
+                          <a href="#" class="text-dark d-flex align-items-center justify-content-between"
+                            data-toggle="collapse" data-target="#checkoutCollapseOnee" aria-expanded="true"
+                            aria-controls="checkoutCollapseOnee">
+                            <h3 class="checkout-title mb-0 font-weight-medium font-size-3">
+                              Đơn hàng của bạn
+                            </h3>
+                            <svg class="mins" xmlns="http://www.w3.org/2000/svg"
+                              xmlns:xlink="http://www.w3.org/1999/xlink" width="15px" height="2px">
+                              <path fill-rule="evenodd" fill="rgb(22, 22, 25)"
+                                d="M0.000,-0.000 L15.000,-0.000 L15.000,2.000 L0.000,2.000 L0.000,-0.000 Z" />
+                            </svg>
+                            <svg class="plus" xmlns="http://www.w3.org/2000/svg"
+                              xmlns:xlink="http://www.w3.org/1999/xlink" width="15px" height="15px">
+                              <path fill-rule="evenodd" fill="rgb(22, 22, 25)"
+                                d="M15.000,8.000 L9.000,8.000 L9.000,15.000 L7.000,15.000 L7.000,8.000 L0.000,8.000 L0.000,6.000 L7.000,6.000 L7.000,-0.000 L9.000,-0.000 L9.000,6.000 L15.000,6.000 L15.000,8.000 Z" />
+                            </svg>
+                          </a>
+                        </div>
+                        <div id="checkoutCollapseOnee" class="mt-4 checkout-content collapse show"
+                          aria-labelledby="checkoutHeadingOnee" data-parent="#checkoutAccordion">
+                          <table class="shop_table woocommerce-checkout-review-order-table">
+                            <tbody>
+                              {% for cart_item in cart_items %}
+                              <tr class="cart_item">
+                                <td class="product-name">
+                                  {{cart_item.product.name}}&nbsp;
+                                  <strong class="product-quantity">× {{cart_item.quantity}}</strong>
+                                </td>
+                                <td class="product-total">
+                                  <span class="woocommerce-Price-amount amount">
+                                    {{cart_item.total | floatformat | intcomma}}
+                                    <span class="woocommerce-Price-currencySymbol">₫</span>
+                                  </span>
+                                </td>
+                              </tr>
+                              {% endfor %}
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                      <div class="p-4d875 border">
+                        <div id="checkoutHeadingTwo" class="checkout-head">
+                          <a href="#" class="text-dark d-flex align-items-center justify-content-between"
+                            data-toggle="collapse" data-target="#checkoutCollapseTwo" aria-expanded="true"
+                            aria-controls="checkoutCollapseTwo">
+                            <h3 class="checkout-title mb-0 font-weight-medium font-size-3">Vận chuyển</h3>
+                            <svg class="mins" xmlns="http://www.w3.org/2000/svg"
+                              xmlns:xlink="http://www.w3.org/1999/xlink" width="15px" height="2px">
+                              <path fill-rule="evenodd" fill="rgb(22, 22, 25)"
+                                d="M0.000,-0.000 L15.000,-0.000 L15.000,2.000 L0.000,2.000 L0.000,-0.000 Z"></path>
+                            </svg>
+                            <svg class="plus" xmlns="http://www.w3.org/2000/svg"
+                              xmlns:xlink="http://www.w3.org/1999/xlink" width="15px" height="15px">
+                              <path fill-rule="evenodd" fill="rgb(22, 22, 25)"
+                                d="M15.000,8.000 L9.000,8.000 L9.000,15.000 L7.000,15.000 L7.000,8.000 L0.000,8.000 L0.000,6.000 L7.000,6.000 L7.000,-0.000 L9.000,-0.000 L9.000,6.000 L15.000,6.000 L15.000,8.000 Z">
+                              </path>
+                            </svg>
+                          </a>
+                        </div>
+                        <div id="checkoutCollapseTwo" class="mt-4 checkout-content collapse show"
+                          aria-labelledby="checkoutHeadingTwo" data-parent="#checkoutAccordion">
+                          <ul id="shipping_method">
+                          </ul>
+                          <div class="fee-error text-primary font-weight-bold"></div>
+                        </div>
+                      </div>
+                      <div class="p-4d875 border">
+                        <div id="checkoutHeadingOne" class="checkout-head">
+                          <a href="#" class="text-dark d-flex align-items-center justify-content-between"
+                            data-toggle="collapse" data-target="#checkoutCollapseOne" aria-expanded="true"
+                            aria-controls="checkoutCollapseOne">
+                            <h3 class="checkout-title mb-0 font-weight-medium font-size-3">
+                              Tóm tắt
+                            </h3>
+                            <svg class="mins" xmlns="http://www.w3.org/2000/svg"
+                              xmlns:xlink="http://www.w3.org/1999/xlink" width="15px" height="2px">
+                              <path fill-rule="evenodd" fill="rgb(22, 22, 25)"
+                                d="M0.000,-0.000 L15.000,-0.000 L15.000,2.000 L0.000,2.000 L0.000,-0.000 Z" />
+                            </svg>
+                            <svg class="plus" xmlns="http://www.w3.org/2000/svg"
+                              xmlns:xlink="http://www.w3.org/1999/xlink" width="15px" height="15px">
+                              <path fill-rule="evenodd" fill="rgb(22, 22, 25)"
+                                d="M15.000,8.000 L9.000,8.000 L9.000,15.000 L7.000,15.000 L7.000,8.000 L0.000,8.000 L0.000,6.000 L7.000,6.000 L7.000,-0.000 L9.000,-0.000 L9.000,6.000 L15.000,6.000 L15.000,8.000 Z" />
+                            </svg>
+                          </a>
+                        </div>
+                        <div id="checkoutCollapseOne" class="mt-4 checkout-content collapse show"
+                          aria-labelledby="checkoutHeadingOne" data-parent="#checkoutAccordion">
+                          <table class="shop_table shop_table_responsive">
+                            <tbody>
+                              <tr class="checkout-subtotal">
+                                <th>Sản phẩm</th>
+                                <td data-title="Subtotal">
+                                  <span class="amount cartsubtotal-wrap">
+                                    <span class="cartsubtotal">{{cart_subtotal | floatformat | intcomma}}</span>
+                                    <span>₫</span>
+                                  </span>
+                                </td>
+                              </tr>
+                              <tr class="order-shipping">
+                                <th>Phí vận chuyển</th>
+                                <td data-title="Shipping" class="shippingfee-wrap">
+                                  <span class="shippingfee">0</span>
+                                  <span>₫</span>
+                                </td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                      <div class="p-4d875 border">
+                        <table class="shop_table shop_table_responsive">
+                          <tbody>
+                            <tr class="order-total">
+                              <th>Thành tiền</th>
+                              <td data-title="Total">
+                                <strong>
+                                  <span class="carttotal-wrap amount">
+                                    <span class="carttotal"></span>{{cart_subtotal | floatformat | intcomma}}
+                                    <span>₫</span>
+                                  </span>
+                                </strong>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                    <div class="form-row place-order">
+                      <button type="submit" class="button alt btn btn-dark btn-block rounded-0 py-4">Đặt hàng</button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </article>
+        </main>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  $(document).ready(() => {
+    $('#shipping_province').on('change', () => {
+      $('.shippingfee-wrap').html(`${new Intl.NumberFormat("vi-VN", { style: "currency", currency: "VND" }).format(0)}`)
+      $("#shipping_method").html('')
+      $("#shipping_district").html('<option selected value="">Chọn Quận/ Huyện ...</option>')
+      $("#shipping_ward").html('<option selected value="">Chọn phường/ Thị xã ...</option>')
+      if ($('#shipping_province option:selected').val() !== "") {
+        let province_id = parseInt($('#shipping_province option:selected').val().split("-")[0])
+        let csrfmiddlewaretoken = $('input[name="csrfmiddlewaretoken"').val()
+        $.ajax({
+          url: '/payment/address/district/',
+          method: 'POST',
+          data: { province_id, csrfmiddlewaretoken },
+          beforeSend: function () {
+            $('.loading-here').addClass("bg-loading")
+            $(".loading-here").html(`<div class="spinner-border text-primary" role="status">
+                        <span class="sr-only">Loading...</span>
+                        </div>`)
+          },
+          complete: function () {
+            $('.loading-here').removeClass("bg-loading")
+            $('.loading-here').empty()
+          },
+          success: function (data) {
+            let html = `<option selected value="">Chọn Quận/ Huyện ...</option>${data.map(district =>
+              `<option value="${district.DistrictID}-${district.DistrictName}">${district.DistrictName}</option>`).join("")}`
+            $("#shipping_district").html(html)
+            let current_subtotal = parseInt($('.cartsubtotal').text().replaceAll(',', ''))
+            $('.carttotal-wrap').html(`${new Intl.NumberFormat("vi-VN", { style: "currency", currency: "VND" }).format(current_subtotal)}`)
+          }
+        })
+      }
+
+    })
+    $('#shipping_district').on('change', () => {
+      $('.shippingfee-wrap').html(`${new Intl.NumberFormat("vi-VN", { style: "currency", currency: "VND" }).format(0)}`)
+      $("#shipping_method").html('')
+      $("#shipping_ward").html('<option selected value="">Chọn phường/ Thị xã ...</option>')
+      if ($('#shipping_district option:selected').val() !== "") {
+        let district_id = parseInt($('#shipping_district option:selected').val().split("-")[0])
+        let csrfmiddlewaretoken = $('input[name="csrfmiddlewaretoken"').val()
+        $.ajax({
+          url: '/payment/address/town/',
+          method: 'POST',
+          data: { district_id, csrfmiddlewaretoken },
+          beforeSend: function () {
+            $('.loading-here').addClass("bg-loading")
+            $(".loading-here").html(`<div class="spinner-border text-primary" role="status">
+                        <span class="sr-only">Loading...</span>
+                        </div>`)
+          },
+          complete: function () {
+            $('.loading-here').removeClass("bg-loading")
+            $('.loading-here').empty()
+          },
+          success: function (data) {
+            let html = `<option selected value="">Chọn phường/ Thị xã ...</option>${data.map(ward =>
+              `<option value="${ward.WardCode}-${ward.WardName}">${ward.WardName}</option>`).join("")}`
+            $("#shipping_ward").html(html)
+            let current_subtotal = parseInt($('.cartsubtotal').text().replaceAll(',', ''))
+            $('.carttotal-wrap').html(`${new Intl.NumberFormat("vi-VN", { style: "currency", currency: "VND" }).format(current_subtotal)}`)
+          }
+        })
+      }
+    })
+    $('#shipping_ward').on('change', () => {
+      if ($('#shipping_ward option:selected').val() !== "") {
+        let district_id = parseInt($('#shipping_district option:selected').val().split("-")[0])
+        let csrfmiddlewaretoken = $('input[name="csrfmiddlewaretoken"').val()
+        $.ajax({
+          url: '/payment/services/',
+          method: 'POST',
+          data: { district_id, csrfmiddlewaretoken },
+          beforeSend: function () {
+            $('.loading-here').addClass("bg-loading")
+            $(".loading-here").html(`<div class="spinner-border text-primary" role="status">
+                        <span class="sr-only">Loading...</span>
+                        </div>`)
+          },
+          complete: function () {
+            $('.loading-here').removeClass("bg-loading")
+            $('.loading-here').empty()
+          },
+          success: function (data) {
+            let html = data.map(service => `<li>
+                              <input type="radio" name="shipping_service" value="${service.service_id}" class="shipping_method" required>
+                              <label for="shipping_method_0_flat_rate1">${service.short_name}</label>
+                            </li>`).join('')
+            $("#shipping_method").html(html)
+            $("input[name=shipping_service]").change((e) => {
+              let shipping_ward = $('#shipping_ward option:selected').val().split("-")[0];
+              let service_id = parseInt($('input[name=shipping_service]:checked').val())
+              $.ajax({
+                url: '/payment/shipping-fee/',
+                method: 'POST',
+                data: { shipping_ward, shipping_district: district_id, service_id, csrfmiddlewaretoken },
+                beforeSend: function () {
+                  $('.loading-here').addClass("bg-loading")
+                  $(".loading-here").html(`<div class="spinner-border text-primary" role="status">
+                        <span class="sr-only">Loading...</span>
+                        </div>`)
+                },
+                complete: function () {
+                  $('.loading-here').removeClass("bg-loading")
+                  $('.loading-here').empty()
+                },
+                success: function (data) {
+                  $('.shippingfee-wrap').html(`${new Intl.NumberFormat("vi-VN", { style: "currency", currency: "VND" }).format(data.total)}`)
+                  let current_subtotal = parseInt($('.cartsubtotal').text().replaceAll(',', ''))
+                  $('.carttotal-wrap').html(`${new Intl.NumberFormat("vi-VN", { style: "currency", currency: "VND" }).format(current_subtotal + data.total)}`)
+                },
+                error: function(xhr, status, error){
+                  if(xhr.status == 400){
+                    $('input[name=shipping_service]:checked').prop('checked', false)
+                    $('.fee-error').html(xhr.responseJSON.message)
+                    setTimeout(()=>{
+                      $('.fee-error').html('')
+                    }, 1000)
+                  }
+                }
+              })
+            })
+          }
+        })
+      }
+    })
+  })
+</script>
+{% endblock %}

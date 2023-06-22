@@ -1,0 +1,174 @@
+{% extends "base.html" %} {% block content %}
+{% load humanize %}
+<main id="content">
+  <div class="bg-gray-200 space-bottom-3">
+    <div class="container">
+      <div class="py-5 py-lg-7">
+        <h6 class="font-weight-medium font-size-7 text-center mt-lg-1">
+        </h6>
+      </div>
+      <div class="max-width-890 mx-auto">
+        <div class="bg-white pt-6 border">
+            {% if order %}
+          <h6 class="font-size-3 font-weight-medium text-center mb-4 pb-xl-1">
+            Cảm ơn bạn, đơn hàng đã được đặt thành công.
+          </h6>
+          <div
+            class="border-bottom mb-5 pb-5 overflow-auto overflow-md-visible"
+          >
+            <div class="pl-3">
+              <table class="table table-borderless mb-0 ml-1">
+                <thead>
+                  <tr>
+                    <th scope="col" class="font-size-2 font-weight-normal py-0">
+                      Mã đơn hàng:
+                    </th>
+                    <th scope="col" class="font-size-2 font-weight-normal py-0">
+                      Ngày tạo:
+                    </th>
+                    <th
+                      scope="col"
+                      class="font-size-2 font-weight-normal py-0 text-md-center"
+                    >
+                      Thành tiền:
+                    </th>
+                    <th
+                      scope="col"
+                      class="font-size-2 font-weight-normal py-0 text-md-right pr-md-9"
+                    >
+                      Phương thức thanh toán:
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <th scope="row" class="pr-0 py-0 font-weight-medium">
+                      {{order.id}}
+                    </th>
+                    <td class="pr-0 py-0 font-weight-medium">{{order.created_at}}</td>
+                    <td class="pr-0 py-0 font-weight-medium text-md-center">
+                      {{order.total | floatformat | intcomma}} ₫
+                    </td>
+                    <td class="pr-md-4 py-0 font-weight-medium text-md-right">
+                        VNPAY/ {{vnp_CardType}}/ {{vnp_BankCode}}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="border-bottom mb-5 pb-6">
+            <div class="px-3 px-md-4">
+              <div class="ml-md-2">
+                <h6 class="font-size-3 on-weight-medium mb-4 pb-1">
+                  Thông tin đơn hàng
+                </h6>
+                <div class="mb-4"></div>
+                {% for order_item in order.order_items.all %}
+                <div class="d-flex justify-content-between">
+                    <div class="d-flex align-items-baseline">
+                      <div>
+                        <h6 class="font-size-2 font-weight-normal mb-1">
+                          {{order_item.product.name}}
+                        </h6>
+                        <span class="font-size-2 text-gray-600"
+                          >(SÁCH)</span
+                        >
+                      </div>
+                      <span class="font-size-2 ml-2 ml-md-6">x {{order_item.quantity}}</span>
+                    </div>
+                    <span class="font-weight-medium font-size-2">{% widthratio order_item.quantity 1 order_item.product.price %} ₫</span>
+                </div>
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+          <div class="border-bottom mb-5 pb-5">
+            <ul class="list-unstyled px-3 pl-md-5 pr-md-4 mb-0">
+              <li class="d-flex justify-content-between py-2">
+                <span class="font-weight-medium font-size-2">Tạm tính:</span>
+                <span class="font-weight-medium font-size-2">{{order.product_price | floatformat | intcomma}} ₫</span>
+              </li>
+              <li class="d-flex justify-content-between py-2">
+                <span class="font-weight-medium font-size-2">Phí vận chuyển:</span>
+                <span class="font-weight-medium font-size-2"
+                  >{{order.shipping_fee | floatformat | intcomma }} ₫</span
+                >
+              </li>
+              <li class="d-flex justify-content-between pt-2">
+                <span class="font-weight-medium font-size-2"
+                  >Phương thức thanh toán:</span
+                >
+                <span class="font-weight-medium font-size-2"
+                  >VNPAY/ {{vnp_CardType}}/ {{vnp_BankCode}}</span
+                >
+              </li>
+            </ul>
+          </div>
+          <div class="border-bottom mb-5 pb-4">
+            <div class="px-3 pl-md-5 pr-md-4">
+              <div class="d-flex justify-content-between">
+                <span class="font-size-2 font-weight-medium">Thành tiền</span>
+                <span class="font-weight-medium fon-size-2">{{order.total | floatformat | intcomma }} ₫</span>
+              </div>
+            </div>
+          </div>
+          {% else %}
+          <h6 class="font-size-3 font-weight-medium text-center mb-4 pb-xl-1">
+            Giao dịch không thành công
+          </h6>
+          {% endif %}
+          <div class="border-bottom mb-5 pb-5">
+            <ul class="list-unstyled px-3 pl-md-5 pr-md-4 mb-0">
+            <li class="d-flex justify-content-between py-2">
+                <span class="font-weight-medium font-size-2">Mã đơn hàng:</span>
+                <span class="font-weight-medium font-size-2">{{order_id}}</span>
+            </li>
+              <li class="d-flex justify-content-between py-2">
+                <span class="font-weight-medium font-size-2">Mã giao dịch:</span>
+                <span class="font-weight-medium font-size-2">{{transaction_id}}</span>
+              </li>
+              <li class="d-flex justify-content-between py-2">
+                <span class="font-weight-medium font-size-2">Mã ngân hàng:</span>
+                <span class="font-weight-medium font-size-2"
+                  >{{vnp_BankCode}}</span
+                >
+              </li>
+              <li class="d-flex justify-content-between py-2">
+                <span class="font-weight-medium font-size-2">Loại thẻ:</span>
+                <span class="font-weight-medium font-size-2"
+                  >{{vnp_CardType}}</span
+                >
+              </li>
+              <li class="d-flex justify-content-between py-2">
+                <span class="font-weight-medium font-size-2">Trạng thái:</span>
+                <span class="font-weight-medium font-size-2"
+                  >{{message}}</span
+                >
+              </li>
+            </ul>
+          </div>
+          {% if order %}
+          <div class="px-3 pl-md-5 pr-md-4 mb-6 pb-xl-1">
+            <div class="row row-cols-1 row-cols-md-2">
+              <div class="col">
+                <h6 class="font-weight-medium font-size-22 mb-3">
+                  Thông tin giao hàng
+                </h6>
+                <address class="d-flex flex-column mb-0">
+                  <span class="text-gray-600 font-size-2">{{order.name}}</span>
+                  <span class="text-gray-600 font-size-2">{{order.shipping_address}}</span>
+                  <span class="text-gray-600 font-size-2">{{order.shipping_ward}}</span>
+                  <span class="text-gray-600 font-size-2">{{order.shipping_district}}</span>
+                  <span class="text-gray-600 font-size-2">{{order.shipping_province}}</span>
+                </address>
+              </div>
+            </div>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+{% endblock %}

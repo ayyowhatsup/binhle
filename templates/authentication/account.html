@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block content %}
+<main id="content">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-3 border-right">
+                <h6 class="font-weight-medium font-size-7 pt-5 pt-lg-8  mb-5 mb-lg-7">Tài khoản</h6>
+                <div class="tab-wrapper">
+                    <ul class="my__account-nav nav flex-column mb-0" role="tablist" id="pills-tab">
+                        <li class="nav-item mx-0">
+                            <a class="nav-link d-flex align-items-center px-0" href="{% url 'account_dashboard' %}">
+                                <span class="font-weight-normal text-gray-600">Dashboard</span>
+                            </a>
+                        </li>
+                        <li class="nav-item mx-0">
+                            <a class="nav-link d-flex align-items-center px-0" href="{% url 'account_detail' %}">
+                                <span class="font-weight-normal text-gray-600">Thông tin cá nhân</span>
+                            </a>
+                        </li>
+                        <li class="nav-item mx-0">
+                            <a class="nav-link d-flex align-items-center px-0" href="{% url 'account_order' %}">
+                                <span class="font-weight-normal text-gray-600">Đơn hàng</span>
+                            </a>
+                        </li>
+                        <li class="nav-item mx-0">
+                            <a class="nav-link d-flex align-items-center px-0" href="{% url 'account_wishlist' %}">
+                                <span class="font-weight-normal text-gray-600">Danh sách yêu thích</span>
+                            </a>
+                        </li>
+                        <li class="nav-item mx-0">
+                            <a class="nav-link d-flex align-items-center px-0" href="{% url 'logout' %}">
+                                <span class="font-weight-normal text-gray-600">Đăng xuất</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-md-9">
+                <div>
+                    {% block account_content %}{% endblock %}
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock %}

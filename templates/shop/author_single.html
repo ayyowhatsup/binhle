@@ -1,0 +1,267 @@
+{% extends "base.html" %}
+{% block content %}
+{% load static %}
+{% load humanize %}
+<main id="content">
+    <div class="space-bottom-2 space-bottom-lg-3">
+        <div class="pb-lg-1">
+            <div class="page-header border-bottom">
+                <div class="container">
+                    <div class="d-md-flex justify-content-between align-items-center py-4">
+                        <h1 class="page-title font-size-3 font-weight-medium m-0 text-lh-lg">{{author.name}}</h1>
+                        <nav class="woocommerce-breadcrumb font-size-2">
+                            <a href="{% url 'home_page' %}" class="h-primary">Trang chủ</a>
+                            <span class="breadcrumb-separator mx-1"><i class="fas fa-angle-right"></i></span>
+                            <span>{{author.name}}</span>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            <section class="space-bottom-2 space-bottom-lg-3">
+                <div class="bg-gray-200 space-bottom-2 space-bottom-md-0">
+                    <div class="container space-top-2 space-top-wd-3 px-3">
+                        <div class="row">
+                            <div class="col-lg-4 col-wd-3 d-flex align-items-center">
+                                <img class="img-fluid" src="{{author.image.url}}" alt="Image-Description">
+                            </div>
+                            <div class="col-lg-8 col-wd-9">
+                                <div class="mb-8">
+                                    <span class="text-gray-400 font-size-2">TÁC GIẢ</span>
+                                    <h6 class="font-size-7 ont-weight-medium mt-2 mb-3 pb-1">
+                                        {{author.name}}
+                                    </h6>
+                                    <p class="mb-0">{{author.description}}</p>
+                                </div>
+                                <h6 class="font-size-3 ont-weight-medium mt-2 mb-3 pb-1">
+                                    Sách nổi bật
+                                </h6>
+                                <ul
+                                    class="products list-unstyled row no-gutters row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-wd-4 my-0 mb-md-8 mb-wd-12">
+                                    {% for book in featured_books %}
+                                    <li class="product product__no-border col border-0 mb-2 mb-lg-0">
+                                        <div class="product__inner overflow-hidden p-3 p-md-4d875 mx-1 bg-white">
+                                            <div
+                                                class="woocommerce-LoopProduct-link woocommerce-loop-product__link d-block position-relative">
+                                                <div class="woocommerce-loop-product__thumbnail">
+                                                    <a href="{% url 'product_single' book.slug %}" class="d-block"><img
+                                                            src="{{book.image.url}}"
+                                                            class="img-fluid d-block mx-auto attachment-shop_catalog size-shop_catalog wp-post-image"
+                                                            alt="image-description"></a>
+                                                </div>
+                                                <div class="woocommerce-loop-product__body product__body pt-3 bg-white">
+                                                    <div class="text-uppercase font-size-1 mb-1 text-truncate"><a
+                                                            href="{% url 'product_single' book.slug %}">SÁCH</a></div>
+                                                    <h2
+                                                        class="woocommerce-loop-product__title product__title h6 text-lh-md mb-1 text-height-2 crop-text-2 h-dark">
+                                                        <a href="{% url 'product_single' book.slug %}">{{book.name}}</a>
+                                                    </h2>
+                                                    <div class="font-size-2  mb-1 text-truncate">
+                                                        {% with authors=book.authors.all %}
+                                                        {% for author in authors %}
+                                                        <a href="{% url 'author_single' author.slug %}"
+                                                            class="text-gray-700">{{author.name}}</a>
+                                                        {% if not forloop.last %}<span>, </span>{% endif %}
+                                                        {% endfor %}
+                                                        {% endwith %}
+                                                    </div>
+                                                    <div
+                                                        class="price d-flex align-items-center font-weight-medium font-size-3">
+                                                        <span class="woocommerce-Price-amount amount">
+                                                            {{book.price | floatformat | intcomma}}
+                                                            <span class="woocommerce-Price-currencySymbol">₫</span>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <div
+                                                    class="product__hover d-flex align-items-center justify-content-between">
+                                                    <form action="{% url 'cart' %}" class="addToCartForm">
+                                                        {% csrf_token %}
+                                                        <input type="hidden" name="product_slug" value="{{book.slug}}">
+                                                        <input type="hidden" name="operation" value="add">
+                                                        <input type="hidden" name="type" value="ajax">
+                                                        <div class="text-uppercase text-dark h-dark font-weight-medium mr-auto add-to-cart"
+                                                            data-toggle="tooltip" data-placement="right" title=""
+                                                            data-original-title="Thêm vào giỏ">
+                                                            <span class="product__add-to-cart">Thêm vào giỏ</span>
+                                                            <span class="product__add-to-cart-icon font-size-4"><i
+                                                                    class="flaticon-icon-126515"></i></span>
+                                                        </div>
+                                                    </form>
+                                                    <form method="post" action="{% url 'account_wishlist' %}">
+                                                        {% csrf_token %}
+                                                        <input type="hidden" name="product_slug" value="{{book.slug}}">
+                                                        <input type="hidden" name="operation" value="add">
+                                                        <button type="submit"
+                                                            class="h-p-bg btn btn-outline-primary border-0"><i
+                                                                class="flaticon-heart"></i></button>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <div class="container">
+                <header class="mb-5">
+                    <h2 class="font-size-7 mb-0">Sách của tác giả</h2>
+                </header>
+                {% if books|length >= 4 %}
+                <ul class="js-slick-carousel products list-unstyled my-0 border-right border-top border-left"
+                    data-arrows-classes="d-none d-lg-block u-slick__arrow u-slick__arrow-centered--y"
+                    data-arrow-left-classes="fas flaticon-back u-slick__arrow-inner u-slick__arrow-inner--left ml-lg-n10"
+                    data-arrow-right-classes="fas flaticon-next u-slick__arrow-inner u-slick__arrow-inner--right mr-lg-n10"
+                    data-slides-show="4" data-responsive='[{
+                           "breakpoint": 992,
+                           "settings": {
+                             "slidesToShow": 2
+                           }
+                        }, {
+                           "breakpoint": 768,
+                           "settings": {
+                             "slidesToShow": 1
+                           }
+                        }, {
+                           "breakpoint": 554,
+                           "settings": {
+                             "slidesToShow": 1
+                           }
+                        }]'>
+                    {% for book in books %}
+                    <li class="product">
+                        <div class="product__inner overflow-hidden p-4d875">
+                            <div
+                                class="woocommerce-LoopProduct-link woocommerce-loop-product__link d-block position-relative">
+                                <div class="woocommerce-loop-product__thumbnail">
+                                    <a href="{% url 'product_single' book.slug %}" class="d-block"><img
+                                            src="{{book.image.url}}" style="width: 150px;"
+                                            class="d-block mx-auto attachment-shop_catalog size-shop_catalog wp-post-image img-fluid"
+                                            alt="image-description"></a>
+                                </div>
+                                <div class="woocommerce-loop-product__body product__body pt-3 bg-white">
+                                    <div class="text-uppercase font-size-1 mb-1 text-truncate"><a
+                                            href="{% url 'product_single' book.slug %}">SÁCH</a></div>
+                                    <h2
+                                        class="woocommerce-loop-product__title product__title h6 text-lh-md mb-1 text-height-2 crop-text-2 h-dark">
+                                        <a href="{% url 'product_single' book.slug %}">{{book.name}}</a>
+                                    </h2>
+                                    <div class="font-size-2  mb-1 text-truncate">
+                                        {% with authors=book.authors.all %}
+                                        {% for author in authors %}
+                                        <a href="{% url 'author_single' author.slug %}"
+                                            class="text-gray-700">{{author.name}}</a>
+                                        {% if not forloop.last %}<span>, </span>{% endif %}
+                                        {% endfor %}
+                                        {% endwith %}
+                                    </div>
+                                    <div class="price d-flex align-items-center font-weight-medium font-size-3">
+                                        <span class="woocommerce-Price-amount amount">
+                                            {{book.price | floatformat | intcomma}}
+                                            <span class="woocommerce-Price-currencySymbol">₫</span>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="product__hover d-flex align-items-center justify-content-between">
+                                    <form action="{% url 'cart' %}" class="addToCartForm">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="product_slug" value="{{book.slug}}">
+                                        <input type="hidden" name="operation" value="add">
+                                        <input type="hidden" name="type" value="ajax">
+                                        <div class="text-uppercase text-dark h-dark font-weight-medium mr-auto add-to-cart"
+                                            data-toggle="tooltip" data-placement="right" title=""
+                                            data-original-title="Thêm vào giỏ">
+                                            <span class="product__add-to-cart">Thêm vào giỏ</span>
+                                            <span class="product__add-to-cart-icon font-size-4"><i
+                                                    class="flaticon-icon-126515"></i></span>
+                                        </div>
+                                    </form>
+                                    <form method="post" action="{% url 'account_wishlist' %}">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="product_slug" value="{{book.slug}}">
+                                        <input type="hidden" name="operation" value="add">
+                                        <button type="submit" class="h-p-bg btn btn-outline-primary border-0"><i
+                                                class="flaticon-heart"></i></button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% else %}
+                <ul class="products list-unstyled mb-6">
+                    {% for book in books%}
+                    <li class="product product__list">
+                        <div class="product__inner overflow-hidden p-3 p-md-4d875">
+                            <div
+                                class="woocommerce-LoopProduct-link woocommerce-loop-product__link row position-relative">
+                                <div class="col-md-auto woocommerce-loop-product__thumbnail mb-3 mb-md-0">
+                                    <a href="{% url 'product_single' book.slug %}" class="d-block"><img
+                                            style="width: 150px" src="{{book.image.url}}"
+                                            class="img-fluid d-block mx-auto attachment-shop_catalog size-shop_catalog wp-post-image img-fluid"
+                                            alt="image-description"></a>
+                                </div>
+                                <div
+                                    class="col-md woocommerce-loop-product__body product__body pt-3 bg-white mb-3 mb-md-0">
+                                    <div class="text-uppercase font-size-1 mb-1 text-truncate"><a
+                                            href="{% url 'product_single' book.slug %}">SÁCH</a></div>
+                                    <h2
+                                        class="woocommerce-loop-product__title product__title h6 text-lh-md mb-1 crop-text-2 h-dark">
+                                        <a href="{% url 'product_single' book.slug %}" tabindex="0">{{book.name}}</a>
+                                    </h2>
+                                    <div class="font-size-2  mb-2 text-truncate">
+                                        {% with authors=book.authors.all %}
+                                        {% for author in authors %}
+                                        <a href="{% url 'author_single' author.slug %}"
+                                            class="text-gray-700">{{author.name}}</a>
+                                        {% if not forloop.last %}<span>, </span>{% endif %}
+                                        {% endfor %}
+                                        {% endwith %}
+                                    </div>
+                                    <p class="font-size-2 mb-2 crop-text-2">{{book.description}}</p>
+                                    <div class="price d-flex align-items-center font-weight-medium font-size-3">
+                                        <span class="woocommerce-Price-amount amount">
+                                            {{book.price | floatformat | intcomma}}
+                                            <span class="woocommerce-Price-currencySymbol">₫</span></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-auto d-flex align-items-center">
+                                    <form action="{% url 'cart' %}" class="addToCartForm">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="product_slug" value="{{book.slug}}">
+                                        <input type="hidden" name="operation" value="add">
+                                        <input type="hidden" name="type" value="ajax">
+                                        <div class="text-uppercase text-dark h-dark font-weight-medium mr-auto add-to-cart"
+                                            data-toggle="tooltip" data-placement="right" title=""
+                                            data-original-title="Thêm vào giỏ">
+                                            <span class="product__add-to-cart">Thêm vào giỏ</span>
+                                            <span class="product__add-to-cart-icon font-size-4"><i
+                                                    class="flaticon-icon-126515"></i></span>
+                                        </div>
+                                    </form>
+                                    <form method="post" action="{% url 'account_wishlist' %}">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="product_slug" value="{{book.slug}}">
+                                        <input type="hidden" name="operation" value="add">
+                                        <button type="submit" class="h-p-bg btn btn-outline-primary border-0">
+                                            <i class="flaticon-heart"></i>
+                                        </button>
+                                    </form>
+
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</main>
+<script src="{% static 'assets/js/cart.js' %}"></script>
+{% endblock %}

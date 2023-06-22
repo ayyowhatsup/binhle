@@ -1,0 +1,47 @@
+{% extends "authentication/account.html" %}
+{% block account_content %}
+{% load humanize %}
+<div>
+    <div class="pt-5 pl-md-5 pt-lg-8 pl-lg-9 space-bottom-lg-2 mb-lg-4">
+        <h6 class="font-weight-medium font-size-7 ml-lg-1 mb-lg-8 pb-xl-1">Đơn hàng</h6>
+        <table class="table">
+            {% if orders %}
+            <thead>
+                <tr class="border">
+                    <th scope="col" class="py-3 border-bottom-0 font-weight-medium pl-3 pl-lg-5">Mã đơn hàng</th>
+                    <th scope="col" class="py-3 border-bottom-0 font-weight-medium">Ngày tạo</th>
+                    <th scope="col" class="py-3 border-bottom-0 font-weight-medium">Trạng thái</th>
+                    <th scope="col" class="py-3 border-bottom-0 font-weight-medium">Thành tiền</th>
+                    <th scope="col" class="py-3 border-bottom-0 font-weight-medium"></th>
+                </tr>
+            </thead>
+            {% for order in orders %}
+            <tbody>
+                <tr class="border">
+                    <th class="pl-3 pl-md-5 font-weight-normal align-middle py-6">#{{order.id}}</th>
+                    <td class="align-middle py-5">{{order.created_at}}</td>
+                    <td class="align-middle py-5">
+                        {% for status in ORDER_STATUSES %}
+                            {% if status.0 == order.status %}
+                                {{ status.1 }}
+                            {% endif %}
+                        {% endfor %}
+                    </td>
+                    <td class="align-middle py-5">
+                        <span class="text-primary">{{order.total | floatformat | intcomma}} ₫</span>
+                    </td>
+                    <td class="align-middle py-5">
+                        <div class="d-flex justify-content-center">
+                            <a href="{% url 'order_detail' order.id %}" class="btn btn-dark rounded-0 btn-wide font-weight-medium">Xem chi tiết</a>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+            {% endfor %}
+            {% else %}
+            <div>Bạn chưa tạo đơn hàng nào. <a href="{% url 'shop' %}">Khám phá cửa hàng</a></div>
+            {% endif %}
+        </table>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,289 @@
+{% extends "base.html" %}
+{% block content %}
+{% load humanize %}
+{% load static %}
+{% load cloudinary %}
+<div class="bg-img-hero img-fluid bg-gray-200">
+    <div class="px-3 px-lg-10 py-3 py-lg-10 space-top-xl-3 space-bottom-xl-1">
+        <div class="js-slick-carousel u-slick"
+            data-pagi-classes="text-center u-slick__pagination u-slick__pagination mb-0 mt-5"
+            data-arrows-classes="d-none d-lg-block u-slick__arrow u-slick__arrow--v2 u-slick__arrow-centered--y"
+            data-arrow-left-classes="flaticon-back u-slick__arrow-inner u-slick__arrow-inner--left ml-lg-n9 ml-xl-n10"
+            data-arrow-right-classes="flaticon-next u-slick__arrow-inner u-slick__arrow-inner--right mr-lg-n9 mr-xl-n10">
+            <div class="pt-xl-3">
+                <div class="row ml-plus-310">
+                    <div class="col-lg-7 col-wd-6">
+                        <div class="media d-block d-lg-flex">
+                            <div class="media-body align-self-center mb-4 mb-lg-0">
+                                <p class="banner__pretitle text-uppercase text-gray-400 font-weight-bold mb-2"
+                                    data-scs-animation-in="fadeInUp" data-scs-animation-delay="200">Sách
+                                </p>
+                                <h2 class="font-size-12 mb-1" data-scs-animation-in="fadeInUp"
+                                    data-scs-animation-delay="300">
+                                    <span class="hero__title-line-1 font-weight-regular d-block">Bộ sưu tập sách nổi bật của tháng</span>
+                                    <span class="hero__title-line-2 font-weight-bold d-block">Năm</span>
+                                </h2>
+                                <div class="font-size-2 text-secondary-gray-700" data-scs-animation-in="fadeInUp"
+                                    data-scs-animation-delay="300">Đã</div>
+                                <div class="font-size-26 font-weight-medium text-primary mb-2"
+                                    data-scs-animation-in="fadeInUp" data-scs-animation-delay="300">xuất hiện</div>
+                                <div>
+                                    <a href="{% url 'shop' %}"
+                                        class="banner_btn btn btn-wide btn-dark rounded-0 text-white"
+                                        data-scs-animation-in="fadeInLeft" data-scs-animation-delay="400">Khám phá ngay</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-5 col-wd-6" data-scs-animation-in="fadeInRight" data-scs-animation-delay="500">
+                        <img src="{% static 'banner.png' %}" class="img-fluid" alt="image-description">
+                    </div>
+                </div>
+            </div>
+            <div class="pt-xl-3">
+                <div class="row p-md-6 p-lg-0">
+                    <div class="offset-xl-3 col-lg-8 col-xl-5 col-wd-5">
+                        <div class="media d-block d-lg-flex ml-lg-6">
+                            <div class="media-body align-self-center mb-4 mb-lg-0">
+                                <p class="banner__pretitle text-uppercase text-gray-400 font-weight-bold mb-2"
+                                    data-scs-animation-in="fadeInUp" data-scs-animation-delay="200">SÁCH
+                                </p>
+                                <h2 class="font-size-12 mb-1" data-scs-animation-in="fadeInUp"
+                                    data-scs-animation-delay="300">
+                                    <span class="hero__title-line-1 font-weight-regular d-block">Bộ sưu tập sách nổi bật của tháng</span>
+                                    <span class="hero__title-line-2 font-weight-bold d-block">Năm</span>
+                                </h2>
+                                <div class="font-size-2 text-secondary-gray-700" data-scs-animation-in="fadeInUp"
+                                    data-scs-animation-delay="300">Đã</div>
+                                <div class="font-size-26 font-weight-medium text-primary mb-2"
+                                    data-scs-animation-in="fadeInUp" data-scs-animation-delay="300">xuất hiện</div>
+                                <div>
+                                    <a href="{% url 'shop'%}"
+                                        class="banner_btn btn btn-wide btn-dark rounded-0 text-white"
+                                        data-scs-animation-in="fadeInLeft" data-scs-animation-delay="400">Khám phá ngay</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-xl-4 col-wd-4" data-scs-animation-in="fadeInRight"
+                        data-scs-animation-delay="500">
+                        <img src="{% static 'banner.png' %}" class="img-fluid" alt="image-description">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="site-features border-bottom space-1d625">
+    <div class="container">
+        <ul class="list-unstyled my-0 list-features d-md-flex align-items-center justify-content-between">
+            <li class="list-feature">
+                <div class="media d-md-block d-xl-flex text-center text-xl-left pr-lg-5 pr-xl-0">
+                    <div class="feature__icon font-size-14 text-primary text-lh-xs mb-md-3 mb-lg-0">
+                        <i class="glyph-icon flaticon-delivery"></i>
+                    </div>
+                    <div class="media-body ml-xl-4">
+                        <h4 class="feature__title font-size-3 text-dark">Vận chuyển nhanh chóng</h4>
+                        <p class="feature__subtitle m-0 text-dark">Với GHN</p>
+                    </div>
+                </div>
+            </li>
+            <li class="separator border-xl-left h-fixed-80" aria-hidden="true" role="presentation"></li>
+            <li class="list-feature">
+                <div class="media  d-md-block d-xl-flex text-center text-xl-left pr-lg-5 pr-xl-0">
+                    <div class="feature__icon font-size-14 text-primary text-lh-xs mb-md-3 mb-lg-0">
+                        <i class="glyph-icon flaticon-credit"></i>
+                    </div>
+                    <div class="media-body ml-xl-4">
+                        <h4 class="feature__title font-size-3 text-dark">Thanh toán an toàn</h4>
+                        <p class="feature__subtitle m-0 text-dark">với Ví VNPay</p>
+                    </div>
+                </div>
+            </li>
+            <li class="separator border-xl-left h-fixed-80" aria-hidden="true" role="presentation"></li>
+            <li class="list-feature">
+                <div class="media  d-md-block d-xl-flex text-center text-xl-left pr-lg-5 pr-xl-0">
+                    <div class="feature__icon font-size-14 text-primary text-lh-xs mb-md-3 mb-lg-0">
+                        <i class="glyph-icon flaticon-warranty"></i>
+                    </div>
+                    <div class="media-body ml-xl-4">
+                        <h4 class="feature__title font-size-3 text-dark">Hoàn tiền miễn phí</h4>
+                        <p class="feature__subtitle m-0 text-dark">Trong 30 ngày</p>
+                    </div>
+                </div>
+            </li>
+            <li class="separator border-xl-left h-fixed-80" aria-hidden="true" role="presentation"></li>
+            <li class="list-feature">
+                <div class="media d-md-block d-xl-flex text-center text-xl-left pr-lg-5 pr-xl-0">
+                    <div class="feature__icon font-size-14 text-primary text-lh-xs mb-md-3 mb-lg-0">
+                        <i class="glyph-icon flaticon-help"></i>
+                    </div>
+                    <div class="media-body ml-xl-4">
+                        <h4 class="feature__title font-size-3 text-dark">Hỗ trợ 24/7</h4>
+                        <p class="feature__subtitle m-0 text-dark">Trong 1 ngày làm việc</p>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<section class="sidebar-with-product space-top-3">
+    <div class="space-bottom-2">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 col-xl-3">
+                    <h2 class="font-size-26 mb-4">Tác giả nổi bật</h2>
+                    <div class="px-4 pt-4 border mb-5">
+                        {% for author in featured_authors %}
+                        <div class="media mb-6 align-items-center">
+                            <a class="d-block" href="{% url 'author_single' author.slug %}">
+                                {% cloudinary author.image.url height=80 width=80 crop="fill" gravity="face" class="rounded-circle" %}
+                            </a>
+                            <div class="media-body ml-3 pl-1">
+                                <h6 class="crop-text-2 text-lh-md font-weight-normal mb-0">
+                                    <a href="{% url 'author_single' author.slug %}">{{author.name}}</a>
+                                </h6>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="col-lg-8 col-xl-9">
+                    <h2 class="font-size-26 mb-4">Sách nổi bật</h2>
+                    <div class="row row-cols-2 row-cols-md-3 row-cols-xl-3 row-cols-wd-4 products">
+                        {% for book in featured_books %}
+                        <div class="col mb-5">
+                            <div class="product border product__space bg-white">
+                                <div class="product__inner overflow-hidden p-3 p-md-4d875">
+                                    <div
+                                        class="woocommerce-LoopProduct-link woocommerce-loop-product__link d-block position-relative">
+                                        <div class="woocommerce-loop-product__thumbnail">
+                                            <a href="{% url 'product_single' book.slug %}" class="d-flex justify-content-between">
+                                                {% cloudinary book.image.url width=150 height=226 gravity="auto" crop="fill" %}
+                                            </a>
+                                            
+                                        </div>
+                                        <div class="woocommerce-loop-product__body product__body pt-3 bg-white">
+                                            <div class="text-uppercase font-size-1 mb-1 text-truncate"><a
+                                                    href="{% url 'product_single' book.slug %}">SÁCH</a></div>
+                                            <h2
+                                                class="woocommerce-loop-product__title product__title h6 text-lh-md mb-1 text-height-2 crop-text-2 h-dark">
+                                                <a href="{% url 'product_single' book.slug %}">{{book.name}}</a>
+                                            </h2>
+                                            <div class="font-size-2  mb-1 text-truncate">
+                                                {% with authors=book.authors.all %}
+                                                    {% for author in authors %}
+                                                    <a href="{% url 'author_single' author.slug %}" class="text-gray-700">{{author.name}}</a>
+                                                    {% if not forloop.last %}<span>, </span>{% endif %}
+                                                    {% endfor %}
+                                                {% endwith %}
+                                            </div>
+                                            <div class="price d-flex align-items-center font-weight-medium font-size-3">
+                                                <span class="woocommerce-Price-amount amount">
+                                                    {{book.price | floatformat | intcomma}} &nbsp;
+                                                    <span class="woocommerce-Price-currencySymbol">₫</span>       
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="product__hover d-flex align-items-center justify-content-between">
+                                            <form action="{% url 'cart' %}"  class="addToCartForm">
+                                                {% csrf_token %}
+                                                <input type="hidden" name="product_slug" value="{{book.slug}}">
+                                                <input type="hidden" name="operation" value="add">
+                                                <input type="hidden" name="type" value="ajax">
+                                                <div class="text-uppercase text-dark h-dark font-weight-medium mr-auto add-to-cart btn"
+                                                    data-toggle="tooltip" data-placement="right" title=""
+                                                    data-original-title="Thêm vào giỏ">
+                                                    <span class="product__add-to-cart">Thêm vào giỏ</span>
+                                                    <span class="product__add-to-cart-icon font-size-4"><i
+                                                            class="flaticon-icon-126515"></i></span>
+                                                </div>
+                                            </form>
+                                            <form method="post" action="{% url 'account_wishlist' %}">
+                                                {% csrf_token %}
+                                                <input type="hidden" name="product_slug" value="{{book.slug}}">
+                                                <input type="hidden" name="operation" value="add">
+                                                <button type="submit" class="h-p-bg btn btn-outline-primary border-0"><i class="flaticon-heart"></i></button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<section>
+    <div class="bg-gray-200 space-top-2 space-bottom-3 space-top-lg-3 space-bottom-lg-4">
+        <div class="container">
+            <header class="mb-5 d-md-flex justify-content-between align-items-center">
+                <h2 class="font-size-7 mb-3 mb-md-0">{{featured_category.name}}</h2>
+                <a href="{% url 'category_single' featured_category.slug %}" class="h-primary d-block">Xem tất cả <i
+                        class="glyph-icon flaticon-next"></i></a>
+            </header>
+            <div class="js-slick-carousel u-slick u-slick--gutters-3 products"
+                data-pagi-classes="text-center u-slick__pagination mt-7 position-absolute right-0 left-0"
+                data-slides-show="3" data-responsive='[{
+                   "breakpoint": 1199,
+                   "settings": {
+                     "slidesToShow": 2
+                   }
+                }, {
+                   "breakpoint": 992,
+                   "settings": {
+                     "slidesToShow": 1
+                   }
+                }, {
+                   "breakpoint": 554,
+                   "settings": {
+                     "slidesToShow": 1
+                   }
+                }]'>
+                {% for book in featured_category_books %}
+                <div class="product product__card border-0">
+                    <div class="media p-3 p-md-4d875 bg-white border">
+                        <a href="{% url 'product_single' book.slug %}" class="d-block"><img style="width: 120px;"
+                                src="{{book.image.url}}" alt="image-description"></a>
+                        <div class="media-body ml-4d875">
+                            <div class="text-uppercase font-size-1 mb-1 text-truncate"><a
+                                    href="{% url 'product_single' book.slug %}">SÁCH</a></div>
+                            <h2
+                                class="woocommerce-loop-product__title h6 text-lh-md mb-1 text-height-2 crop-text-2 h-dark">
+                                <a href="{% url 'product_single' book.slug %}">{{book.name}}</a>
+                            </h2>
+                            <div class="font-size-2 mb-1 crop-text-2">
+                                {% with authors=book.authors.all %}
+                                    {% for author in authors %}
+                                    <a href="{% url 'author_single' author.slug %}" class="text-gray-700">{{author.name}}</a>
+                                    {% if not forloop.last %}<span>, </span>{% endif %}
+                                    {% endfor %}
+                                {% endwith %}
+                            </div>
+                            <div class="price d-flex align-items-center font-weight-medium font-size-2">
+                                <span class="woocommerce-Price-amount amount">
+                                    {{book.price | floatformat | intcomma}} &nbsp;
+                                    <span class="woocommerce-Price-currencySymbol">VND</span>       
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</section>
+{% if login_required %}
+<script>
+    $(document).ready(()=> {
+        $('#sidebarNavToggler').click()
+    })
+</script>
+{% endif %}
+<script src="{% static 'assets/js/cart.js' %}"></script>
+{% endblock %}

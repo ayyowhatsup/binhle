@@ -1,0 +1,66 @@
+{% extends "authentication/account.html" %}
+{% block account_content %}
+{% load humanize %}
+<div>
+    <div class="pt-5 pl-md-5 pt-lg-8 pl-lg-9 space-bottom-lg-2 mb-lg-4">
+        <h6 class="font-weight-medium font-size-7 ml-lg-1 mb-lg-8 pb-xl-1">Đơn hàng #{{order.id}}</h6>
+        <div><span class="font-weight-medium">Ngày tạo: </span>{{order.created_at}}</div>
+        <div><span class="font-weight-medium">Trạng thái: </span>{% for status in ORDER_STATUSES %}
+            {% if status.0 == order.status %}
+                {{ status.1 }}
+            {% endif %}
+        {% endfor %}</div>
+        <div class="space-bottom-lg-2"><span class="font-weight-medium">Mã giao dịch VNPay: </span>{% if order.transaction_id %} {{order.transaction_id}} {% else %}Chưa thanh toán {% endif %}</div>
+        <table class="table">
+            <thead>
+                <tr class="border">
+                    <th scope="col" class="py-3 border-bottom-0 font-weight-medium pl-3 pl-lg-5">Sản phẩm</th>
+                    <th scope="col" class="py-3 border-bottom-0 font-weight-medium">Số lượng</th>
+                    <th scope="col" class="py-3 border-bottom-0 font-weight-medium">Đơn giá</th>
+                    <th scope="col" class="py-3 border-bottom-0 font-weight-medium">Thành tiền</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for order_item in order.order_items.all %}
+                <tr class="border">
+                    <th class="pl-3 pl-md-5 font-weight-normal align-middle py-6">{{order_item.product.name}}</th>
+                    <td class="align-middle py-5">{{order_item.quantity}}</td>
+                    <td class="align-middle py-5">{{order_item.price | floatformat | intcomma}} ₫</td>
+                    <td class="align-middle py-5">
+                        <span class="font-weight-medium">{% widthratio order_item.price 1 order_item.quantity %} ₫</span> 
+                    </td>
+                </tr>
+                {% endfor %}
+                <tr class="border">
+                    <th class="pl-3 pl-md-5 font-weight-normal align-middle py-6"></th>
+                    <td class="align-middle py-5 font-weight-bold" colspan="2">Tạm tính</td>
+                    <td class="align-middle py-5">
+                        <span class="font-weight-medium">{{order.product_price | floatformat |intcomma }} ₫</span> 
+                    </td>
+                </tr>
+                <tr class="border">
+                    <th class="pl-3 pl-md-5 font-weight-normal align-middle py-6"></th>
+                    <td class="align-middle py-5 font-weight-bold" colspan="2">Phí vận chuyển</td>
+                    <td class="align-middle py-5">
+                        <span class="font-weight-medium">{{order.shipping_fee | floatformat |intcomma }} ₫</span> 
+                    </td>
+                </tr>
+                <tr class="border">
+                    <th class="pl-3 pl-md-5 font-weight-normal align-middle py-6"></th>
+                    <td class="align-middle py-5 font-weight-bold" colspan="2">Thành tiền</td>
+                    <td class="align-middle py-5">
+                        <span class="font-weight-medium">{{order.total | floatformat |intcomma }} ₫</span> 
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="space-top-2 font-weight-bold mb-4">Thông tin vận chuyển</div>
+        <div class="py-1"><span class="font-weight-medium">Họ tên: </span>{{order.name}}</div>
+        <div class="py-1"><span class="font-weight-medium">Số điện thoại: </span>{{order.phone_number}}</div>
+        <div class="py-1"><span class="font-weight-medium">Địa chỉ: </span>{{order.shipping_address}}</div>
+        <div class="py-1"><span class="font-weight-medium">Phường/ Thị xã: </span>{{order.shipping_ward}}</div>
+        <div class="py-1"><span class="font-weight-medium">Quận/ Huyện: </span>{{order.shipping_district}}</div>
+        <div class="py-1"><span class="font-weight-medium">Tỉnh/ Thành phố: </span>{{order.shipping_province}}</div>
+    </div>
+</div>
+{% endblock %}

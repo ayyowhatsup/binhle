@@ -1,0 +1,215 @@
+{% extends "base.html" %}
+{% block content %}
+{% load humanize %}
+<div class="right-sidebar woocommerce-cart">
+<div class="page-header border-bottom">
+<div class="container">
+<div class="d-md-flex justify-content-between align-items-center py-4">
+<h1 class="page-title font-size-3 font-weight-medium m-0 text-lh-lg">Giỏ hàng</h1>
+<nav class="woocommerce-breadcrumb font-size-2">
+<a href="{% url 'home_page' %}" class="h-primary">Trang chủ</a>
+<span class="breadcrumb-separator mx-1"><i class="fas fa-angle-right"></i></span>
+Giỏ hàng
+</nav>
+</div>
+</div>
+</div>
+<div class="site-content bg-punch-light overflow-hidden" id="content">
+<div class="container">
+<header class="entry-header space-top-2 space-bottom-1 mb-2">
+</header>
+<div class="row pb-8">
+<div id="primary" class="content-area">
+{% if cart_items %}
+<main id="main" class="site-main">
+<div class="page type-page status-publish hentry">
+
+<div class="entry-content">
+<div class="woocommerce">
+<div class="woocommerce-cart-form table-responsive">
+<table class="shop_table shop_table_responsive cart woocommerce-cart-form__contents">
+<thead>
+<tr>
+<th class="product-name">Sản phẩm</th>
+<th class="product-price">Đơn giá</th>
+<th class="product-quantity">Số lượng</th>
+<th class="product-subtotal">Thành tiền</th>
+<th class="product-remove">&nbsp;</th>
+</tr>
+</thead>
+<tbody>
+{% for cart_item in cart_items %}
+<tr class="woocommerce-cart-form__cart-item cart_item">
+    <td class="product-name" data-title="Product">
+    <div class="d-flex align-items-center">
+    <a href="{% url 'product_single' cart_item.product.slug %}">
+    <img width="90" src="{{cart_item.product.image.url}}" class="attachment-shop_thumbnail size-shop_thumbnail wp-post-image" alt="">
+    </a>
+    <div class="ml-3 m-w-200-lg-down">
+    <a href="{% url 'product_single' cart_item.product.slug %}">{{cart_item.product.name}}</a>
+    <div class="font-size-2  mb-1 text-truncate">
+        {% with authors=cart_item.product.authors.all %}
+            {% for author in authors %}
+            <a href="{% url 'author_single' author.slug %}" class="text-gray-700">{{author.name}}</a>
+            {% if not forloop.last %}<span>, </span>{% endif %}
+            {% endfor %}
+        {% endwith %}
+    </div>
+    </div>
+    </div>
+    </td>
+    <td class="product-price" data-title="Price">
+    <span class="woocommerce-Price-amount amount">{{cart_item.product.price | floatformat | intcomma}}<span class="woocommerce-Price-currencySymbol"> ₫</span></span>
+    </td>
+    <td class="product-quantity" data-title="Quantity">
+     <div class="quantity d-flex align-items-center">
+    
+    <div class="border px-3 width-120">
+    <div class="js-quantity">
+    <div class="d-flex align-items-center">
+    <label class="screen-reader-text sr-only">Số lượng</label>
+    
+    <a class="cart-minus text-dark" href="javascript:;">
+    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="10px" height="1px">
+    <path fill-rule="evenodd" fill="rgb(22, 22, 25)" d="M-0.000,-0.000 L10.000,-0.000 L10.000,1.000 L-0.000,1.000 L-0.000,-0.000 Z" />
+    </svg>
+    </a>
+    <form action="." method="post">
+    {% csrf_token %}
+    <input type="hidden" name="product_slug" value="{{cart_item.product.slug}}"/>
+    <input type="hidden" name="operation" value="update"/>
+    <input type="number" class="input-text qty text form-control text-center border-0 cart_item_quantity" step="1" min="1" max="100" name="quantity" value="{{cart_item.quantity}}" title="Qty">
+    </form>
+    <a class="cart-plus text-dark" href="javascript:;">
+    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="10px" height="10px">
+    <path fill-rule="evenodd" fill="rgb(22, 22, 25)" d="M10.000,5.000 L6.000,5.000 L6.000,10.000 L5.000,10.000 L5.000,5.000 L-0.000,5.000 L-0.000,4.000 L5.000,4.000 L5.000,-0.000 L6.000,-0.000 L6.000,4.000 L10.000,4.000 L10.000,5.000 Z" />
+    </svg>
+    </a>
+    
+    </div>
+    </div>
+    </div>
+    
+    </div>
+    </td>
+    <td class="product-subtotal" data-title="Total">
+    <span class="woocommerce-Price-amount amount">{{cart_item.total | floatformat | intcomma}}<span class="woocommerce-Price-currencySymbol"> ₫</span></span>
+    </td>
+    <td class="product-remove">
+    <form action="." method="post">
+        {% csrf_token %}
+        <input type="hidden" name="product_slug" value="{{cart_item.product.slug}}"/>
+        <input type="hidden" name="operation" value="remove"/>
+    <button type="submit" class="remove remove_cart_item" aria-label="Remove this item">
+    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="15px" height="15px">
+    <path fill-rule="evenodd" fill="rgb(22, 22, 25)" d="M15.011,13.899 L13.899,15.012 L7.500,8.613 L1.101,15.012 L-0.012,13.899 L6.387,7.500 L-0.012,1.101 L1.101,-0.012 L7.500,6.387 L13.899,-0.012 L15.011,1.101 L8.613,7.500 L15.011,13.899 Z" />
+    </svg>
+    </button>
+    </div>
+    </form>
+    </td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
+</div>
+</div>
+</div>
+ 
+</div>
+</main>
+{% else %}
+<div class="bg-white d-flex align-items-center justify-content-center" style="height: 100%">
+    Bạn chưa thêm sản phẩm nào vào giỏ hàng!
+</div>
+{% endif %}
+</div>
+<div id="secondary" class="sidebar cart-collaterals order-1" role="complementary">
+<div id="cartAccordion" class="border border-gray-900 bg-white mb-5">
+<div class="p-4d875 border">
+<div id="cartHeadingOne" class="cart-head">
+<a class="d-flex align-items-center justify-content-between text-dark" href="#" data-toggle="collapse" data-target="#cartCollapseOne" aria-expanded="true" aria-controls="cartCollapseOne">
+<h3 class="cart-title mb-0 font-weight-medium font-size-3">Tóm tắt</h3>
+<svg class="mins" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="15px" height="2px">
+<path fill-rule="evenodd" fill="rgb(22, 22, 25)" d="M0.000,-0.000 L15.000,-0.000 L15.000,2.000 L0.000,2.000 L0.000,-0.000 Z" />
+</svg>
+<svg class="plus" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="15px" height="15px">
+<path fill-rule="evenodd" fill="rgb(22, 22, 25)" d="M15.000,8.000 L9.000,8.000 L9.000,15.000 L7.000,15.000 L7.000,8.000 L0.000,8.000 L0.000,6.000 L7.000,6.000 L7.000,-0.000 L9.000,-0.000 L9.000,6.000 L15.000,6.000 L15.000,8.000 Z" />
+</svg>
+</a>
+</div>
+<div id="cartCollapseOne" class="mt-4 cart-content collapse show" aria-labelledby="cartHeadingOne" data-parent="#cartAccordion">
+<table class="shop_table shop_table_responsive">
+<tbody>
+<tr class="cart-subtotal">
+<th>Tổng tiền</th>
+<td data-title="Subtotal"><span class="woocommerce-Price-amount amount">{{cart_subtotal | floatformat | intcomma}}<span class="woocommerce-Price-currencySymbol">₫</span></span></td>
+</tr>
+<tr class="order-shipping">
+<th>Sản phẩm</th>
+<td data-title="Shipping">{{cart_items | length}}</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="p-4d875 border">
+<table class="shop_table shop_table_responsive">
+<tbody>
+<tr class="order-total">
+<th>Tạm tính</th>
+<td data-title="Total"><strong><span class="woocommerce-Price-amount amount">{{cart_subtotal | floatformat | intcomma}}<span class="woocommerce-Price-currencySymbol">₫</span></span></strong> </td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+{% if cart_items %}
+<div class="wc-proceed-to-checkout">
+<a href="{% url 'checkout' %}" class="checkout-button button alt wc-forward btn btn-dark btn-block rounded-0 py-4">Tiến hành thanh toán</a>
+</div>
+{% else %}
+<div class="wc-proceed-to-checkout">
+    <a href="{% url 'shop' %}" class="checkout-button button alt wc-forward btn btn-dark btn-block rounded-0 py-4">Tiếp tục mua sắm</a>
+</div>
+{% endif %}
+</div>
+</div>
+</div>
+</div>
+</div>
+<script>
+    let input = document.querySelectorAll('.cart_item_quantity')
+    input.forEach(i => {
+        i.addEventListener('input', () => {
+            i.closest('form').submit()
+        })
+    })
+    let minus = document.querySelectorAll('.cart-minus')
+    minus.forEach(m => {
+        m.addEventListener('click', (e) => {
+            e.preventDefault()
+            let result = m.nextElementSibling.querySelector('.cart_item_quantity')
+            let current =  parseInt(result.value)
+            if(current != 0) {
+                result.value = current - 1
+                result.dispatchEvent(new Event('input'))
+            }
+
+        })
+    })
+    let plus = document.querySelectorAll('.cart-plus')
+    plus.forEach(m => {
+        m.addEventListener('click', (e) => {
+            e.preventDefault()
+            let result = m.previousElementSibling.querySelector('.cart_item_quantity')
+            let current =  parseInt(result.value)
+            if(current != 100) {
+                result.value = current + 1
+                result.dispatchEvent(new Event('input'))
+            }
+            
+        })
+    })
+</script>
+{% endblock %}
